@@ -3,7 +3,7 @@ var MT = MT || {};
 MT.arrows = 
 (function() {
 	/**
-	 *  private functions and attributes to make code more save
+	 *  private functions and attributes
 	 */
 	var config = {
 			stretchFactor : 1,				// should the distance be stretched?
@@ -80,39 +80,39 @@ MT.arrows =
 
 		/**
 		 * data: object containing information for arrows
-		 * 		{ key : {
-		 * 					nameOfDegreeProperty* : Number (degree)
-		 * 					nameOfDistanceProperty* : Number (km)
-		 * 					[[nameOfColorProperty* : Any -> will be applied to the 'colorScheme' function]] opt
-		 * 					
-		 * 				}
-		 * 		}
+		 *		{ key : {
+		 *			nameOfDegreeProperty* : Number (degree)
+		 *			nameOfDistanceProperty* : Number (km)
+		 *			[[nameOfColorProperty* : Any -> will be applied to the 'colorScheme' function]] opt
+		 *
+		 *			}
+		 *		}
 		 * 
 		 * options : object for customizing path and data handling
-		 * 			**important** define the names of the attributes in data map, which hold the information on length, 
-		 * 			degree and the parameter for the colorScheme function (*)
+		 *			**important** define the names of the attributes in data map, which hold the information on length, 
+		 *			degree and the parameter for the colorScheme function (*)
 		 * 
-		 * 		{ 
-		 * 			nameOfDegreeProperty : String eg. 'deg' -> name of Property in data objects containing the degree value
-		 * 			nameOfDistanceProperty : String 'length'-> name of Property in data objects containing the distance value 
-		 * 			nameOfColorProperty : String 'value' -> name of Property in data objects containing the value, which should be supplied to the colorScheme function
-		 * 			isWindDegree : boolean (is Degree value direction of wind? -> degree - 180
-		 * 		}
+		 *			{ 
+		 *			nameOfDegreeProperty : String eg. 'deg' -> name of Property in data objects containing the degree value
+		 *			nameOfDistanceProperty : String 'length'-> name of Property in data objects containing the distance value 
+		 *			nameOfColorProperty : String 'value' -> name of Property in data objects containing the value, which should be supplied to the colorScheme function
+		 *			isWindDegree : boolean (is Degree value direction of wind? -> degree - 180
+		 *			}
 		 */
 		makeArrowLayer : function (data, options, colorScheme) {
 			// options: nameOfLayer, isWindDegree, nameOfDegreeAttribute, nameOfDistanceAttribute, pathOptions, popupContent
 			var allArrows = [];
-			for(var stationId in data) {
-				var station = data[stationId];
-				if (station[options.nameOfDegreeProperty] !== undefined && station[options.nameOfDistanceProperty] !== undefined) {
-					var startPoint = new L.LatLng(station.lat, station.lon);	
-					var degree = options.isWindDegree ? station[options.nameOfDegreeProperty] - 180 : station[options.nameOfDegreeProperty];
+			for(var dataId in data) {
+				var entity = data[dataId];
+				if (entity[options.nameOfDegreeProperty] !== undefined && entity[options.nameOfDistanceProperty] !== undefined) {
+					var startPoint = new L.LatLng(entity.lat, entity.lon); // TODO make lat/long property customizable	
+					var degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
 
 					var pathOption = options.pathOptions; 
 
-					pathOption.color = typeof colorScheme === "function" ? colorScheme(station[options.nameOfColorProperty]) : options.color; //this.getColor(station.alt);
+					pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color; 
 					
-					var theLine = [startPoint, calculateEndPoint(startPoint, station[options.nameOfDistanceProperty], degree) ];			
+					var theLine = [startPoint, calculateEndPoint(startPoint, entity[options.nameOfDistanceProperty], degree) ];			
 					var theArrow = calculateArrowArray(theLine[1], degree);
 					
 					var backgroundPathOption = $.extend(true, {}, pathOption);
@@ -122,7 +122,7 @@ MT.arrows =
 					var backgroundMulitpolyline = new L.MultiPolyline([ theLine, theArrow ], backgroundPathOption );
 					var multipolyline = new L.MultiPolyline([ theLine, theArrow ], pathOption );	
 					
-					backgroundMulitpolyline.bindPopup(options.popupContent(station, stationId));
+					backgroundMulitpolyline.bindPopup(options.popupContent(entity, dataId));
 					allArrows.push(multipolyline);
 					allArrows.push(backgroundMulitpolyline);
 					}
@@ -131,4 +131,4 @@ MT.arrows =
 			return { layerGroup : lg, layerName : options.nameOfLayer };
 		}
 	};
-})()
+})();
