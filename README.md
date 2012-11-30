@@ -25,7 +25,7 @@ Usage
 	windlayer.layerGroup.addTo(map);
 	layerControl.addOverlay(windlayer.layerGroup, windlayer.layerName
 
-The 'data'-Arugment for the makeArrowLayer function should be in this style:
+The ''data'' argument for the makeArrowLayer function should be in this style:
 
 	{
 		'key1' : {
