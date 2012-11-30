@@ -23,4 +23,20 @@ Usage
 						popupContent: createPopupContent,
 						}, getColor);
 	windlayer.layerGroup.addTo(map);
-	layerControl.addOverlay(windlayer.layerGroup, windlayer.layerName);
+	layerControl.addOverlay(windlayer.layerGroup, windlayer.layerName
+
+The 'data'-Arugment for the makeArrowLayer function should be in this style:
+
+	{
+		'key1' : {
+			winddirection : 50,
+			windspeed : 10, // km/h
+			alt : 3000,  // this will used as Argument for the getColor function
+			lat : 47.5,
+			lon : 7.6
+			// additional properties can be added and displayed in the popup
+		},
+		'keyN' : { ... }
+	}
+
+note: you can customize the attributes nameOfDegreeProperty, nameOfDistanceProperty, nameOfColorProperty to match your data-objects
