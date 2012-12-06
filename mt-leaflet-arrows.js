@@ -115,6 +115,12 @@ MT.arrows = (function() {
 		makeArrowLayer : function(data, options, colorScheme) {
 			// options: nameOfLayer, isWindDegree, nameOfDegreeAttribute,
 			// nameOfDistanceAttribute, pathOptions, popupContent
+
+			var pointPathOption = {
+				stroke : false,
+				fillOpacity: 0.8,
+			};
+
 			var allArrows = [];
 			for ( var dataId in data) {
 				var entity = data[dataId];
@@ -135,8 +141,8 @@ MT.arrows = (function() {
 
 					// if distance is 0 draw a point instead of an arrow
 					if (distance === 0 || distance === "undefined") {
-						pathOption.stroke = 0;
-						var circle = L.circle(startPoint, 1000, pathOption);
+						pointPathOption.color = pathOption.color;
+						var circle = L.circle(startPoint, 1000, pointPathOption);
 						circle.bindPopup(options.popupContent(entity, dataId));
 						allArrows.push(circle);
 					} else {
