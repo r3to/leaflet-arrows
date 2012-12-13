@@ -10,9 +10,9 @@ MT.arrows = (function() {
 		arrowheadLength : 4, // in km
 		arrowheadClosingLine : false, // should a closing third line be drawn?
 		arrowheadDegree : 140, // degree of arrowhead
-		clickableWidth : 10
-	// defines the width in pixels of the "phantom" path to capture click events
-	// on a line
+		clickableWidth : 10, // defines the width in pixels of the "phantom" path to capture click events on a line
+		validator : function(pointData) { return typeof pointData !== 'undefined'; }, // validator is a callback function that takes the data object of the current point and returns whether it is 'valid'. Invalid arrows will be drawn gray
+		colorInvalidPoint : '#777'
 	};
 
 	function calculateEndPoint(latlng, dist, degree) {
@@ -121,6 +121,8 @@ MT.arrows = (function() {
 				fillOpacity: 0.8,
 			};
 
+			this.setConfiguration(options); // customize the config according to the options
+
 			var allArrows = [];
 			for ( var dataId in data) {
 				var entity = data[dataId];
@@ -134,8 +136,12 @@ MT.arrows = (function() {
 					var distance = entity[options.nameOfDistanceProperty];
 					var pathOption = options.pathOptions;
 
-					pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty])
-							: options.color;
+					// is current arrow valid?
+					if (typeof config.validator !== 'function' || config.validator(entity)) {
+						pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color;						
+					} else {
+						pathOption.color = config.colorInvalidPoint;
+					}
 
 					distance = parseFloat(distance);
 
