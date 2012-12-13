@@ -17,24 +17,7 @@ MT.arrows = (function() {
 
 	function calculateEndPoint(latlng, dist, degree) {
 		/*
-		 * Problem 1C. Calculate end point (latitude/longitude) given a starting
-		 * point, distance, and azimuth
-		 * 
-		 * Given {lat1, lon1, distance, azimuth} calculate {lat2, lon2}. First,
-		 * work backwards (relative to Problem 1A) and find b from the distance
-		 * by dividing by the Earth radius. b = distance / (Earth Radius) making
-		 * sure distance and (Earth Radius) are the same units so that we end up
-		 * with b in radians. Knowing b, calculate a using a =
-		 * arccos(cos(b)*cos(90 - lat1) + sin(90 - lat1)*sin(b)*cos(azimuth)) —
-		 * basically taking the arc cosine of the Law of Cosines for a. From a,
-		 * we can get lat2, so the only item remaining is to figure lon2; we can
-		 * get that if we know B. Calculate B using B =
-		 * arcsin(sin(b)*sin(azimuth)/sin(a)). Then finally, lat2 = 90 - a and
-		 * lon2 = B + lon1. Essentially, we just worked Problem 1A backwards.
-		 * 
-		 * Source:
 		 * http://www.codeguru.com/cpp/cpp/algorithms/article.php/c5115/Geographic-Distance-and-Azimuth-Calculations.htm
-		 * 
 		 */
 		var distance = dist * config.stretchFactor;
 		var R = 6378.137, // earth radius in kmmeters
@@ -70,7 +53,6 @@ MT.arrows = (function() {
 			arr.push(firstEdge);
 		}
 		return arr;
-
 	}
 
 	/**
@@ -96,33 +78,36 @@ MT.arrows = (function() {
 		},
 
 		/**
-		 * data: object containing information for arrows { key : {
-		 * nameOfDegreeProperty* : Number (degree) nameOfDistanceProperty* :
-		 * Number (km) [[nameOfColorProperty* : Any -> will be applied to the
-		 * 'colorScheme' function]] opt } }
+		 * data: object containing information for arrows 
+		 * { key : {
+		 *  	nameOfDegreeProperty* : Number (degree) 
+		 *  	nameOfDistanceProperty* :Number (km) 
+		 *  	[[nameOfColorProperty* : Any -> will be applied to the 'colorScheme' function]] opt 
+		 *		} 
+		 *  }
 		 * 
-		 * options : object for customizing path and data handling **important**
-		 * define the names of the attributes in data map, which hold the
-		 * information on length, degree and the parameter for the colorScheme
-		 * function (*) { nameOfDegreeProperty : String eg. 'deg' -> name of
-		 * Property in data objects containing the degree value
-		 * nameOfDistanceProperty : String 'length'-> name of Property in data
-		 * objects containing the distance value nameOfColorProperty : String
-		 * 'value' -> name of Property in data objects containing the value,
-		 * which should be supplied to the colorScheme function isWindDegree :
-		 * boolean (is Degree value direction of wind? -> degree - 180 }
+		 * options : object for customizing path and data handling 
+		 * 	**important**  define the names of the attributes in data map, which hold the information on length, degree and the parameter for the colorScheme
+		 * function (*) 
+		 * {
+		 *	nameOfDegreeProperty : String eg. 'deg' -> name of Property in data objects containing the degree value
+		 *  nameOfDistanceProperty : String 'length'-> name of Property in data objects containing the distance value 
+		 *  nameOfColorProperty : String 'value' -> name of Property in data objects containing the value, which should be supplied to the colorScheme function 
+		 *  isWindDegree : boolean (is Degree value direction of wind? -> degree - 180 
+		 *  
+		 *  }
 		 */
 		makeArrowLayer : function(data, options, colorScheme) {
 			// options: nameOfLayer, isWindDegree, nameOfDegreeAttribute,
 			// nameOfDistanceAttribute, pathOptions, popupContent
-
+			
+			this.setConfiguration(options);
+						
 			var pointPathOption = {
 				stroke : false,
 				fillOpacity: 0.8,
 			};
-
-			this.setConfiguration(options); // customize the config according to the options
-
+			
 			var allArrows = [];
 			for ( var dataId in data) {
 				var entity = data[dataId];
@@ -135,8 +120,8 @@ MT.arrows = (function() {
 							: entity[options.nameOfDegreeProperty];
 					var distance = entity[options.nameOfDistanceProperty];
 					var pathOption = options.pathOptions;
-
-					// is current arrow valid?
+					
+					// is current arrow valid according to the validator callback? change color if not
 					if (typeof config.validator !== 'function' || config.validator(entity)) {
 						pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color;						
 					} else {
@@ -144,7 +129,7 @@ MT.arrows = (function() {
 					}
 
 					distance = parseFloat(distance);
-
+					 
 					// if distance is 0 draw a point instead of an arrow
 					if (distance === 0 || distance === "undefined") {
 						pointPathOption.color = pathOption.color;
