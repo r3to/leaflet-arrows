@@ -129,23 +129,23 @@ MT.arrows = (function() {
       var allArrows = [];
       for (var dataId in data) {
         var entity = data[dataId];
-        if (typeof entity.lat !== undefined &&
-            typeof entity.lon !== undefined) {
+        if (typeof entity.lat !== "undefined" &&
+            typeof entity.lon !== "undefined") {
           var startPoint = new L.LatLng(entity.lat, entity.lon);
 
-          var degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
-          var distance = entity[options.nameOfDistanceProperty];
+          var distance, degree;
           var pathOption = config.pathOptions;
 
           // is current arrow valid according to the validator callback?
           // change color if not
           if (typeof config.validator !== 'function' || config.validator(entity)) {
             pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color;
+            degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
+            distance = parseFloat(entity[options.nameOfDistanceProperty]);
           } else {
             pathOption.color = config.colorInvalidPoint;
+            distance = 0, degree = 0;
           }
-
-          distance = parseFloat(distance);
 
           // if distance is 0 draw a point instead of an arrow
           if (distance === 0 || distance === "undefined") {
