@@ -156,9 +156,11 @@ MT.arrows = (function() {
           }
         }
       }
-      var lg = L.layerGroup(allArrows);
+
+      var lg = L.featureLayer(allArrows);
+
       return {
-        layerGroup: lg,
+        arrowLayer: lg,
         layerName: options.nameOfLayer
       };
     }
