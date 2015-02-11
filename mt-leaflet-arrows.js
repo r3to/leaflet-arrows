@@ -129,10 +129,9 @@ MT.arrows = (function() {
       var allArrows = [];
       for (var dataId in data) {
         var entity = data[dataId];
-        if (entity[options.nameOfDegreeProperty] !== undefined &&
-          entity[options.nameOfDistanceProperty] !== undefined) {
+        if (typeof entity.lat !== undefined &&
+            typeof entity.lon !== undefined) {
           var startPoint = new L.LatLng(entity.lat, entity.lon);
-          // TODO make name of lat/long property customizable
 
           var degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
           var distance = entity[options.nameOfDistanceProperty];
