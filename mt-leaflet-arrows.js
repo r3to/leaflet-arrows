@@ -15,7 +15,14 @@ MT.arrows = (function() {
     validator: function(pointData) {
       return typeof pointData !== 'undefined';
     }, // validator is a callback function that takes the data object of the current point and returns whether it is 'valid'. Invalid arrows will be drawn gray
-    colorInvalidPoint: '#777'
+    colorInvalidPoint: '#777',
+    pathOptions: {
+      color : '#333',
+      opacity : 0.9,
+      fillOpacity : 0.9,
+      weight : 2,
+      smoothFactor : 0
+    }
   };
 
   function calculateEndPoint(latlng, dist, degree) {
@@ -129,7 +136,7 @@ MT.arrows = (function() {
 
           var degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
           var distance = entity[options.nameOfDistanceProperty];
-          var pathOption = options.pathOptions;
+          var pathOption = config.pathOptions;
 
           // is current arrow valid according to the validator callback?
           // change color if not
@@ -145,8 +152,12 @@ MT.arrows = (function() {
           if (distance === 0 || distance === "undefined") {
             pointPathOption.color = pathOption.color;
             var circle = L.circle(startPoint, 1000, pointPathOption);
-            circle.bindPopup(options.popupContent(entity, dataId));
+
+            if (typeof options.popupContent === 'function') {
+              circle.bindPopup(options.popupContent(entity, dataId));
+            }
             allArrows.push(circle);
+
           } else {
             var theLine = [startPoint, calculateEndPoint(startPoint, distance, degree)];
             var theArrow = calculateArrowArray(theLine[1], degree);
@@ -159,14 +170,17 @@ MT.arrows = (function() {
               backgroundPathOption);
             var multipolyline = new L.MultiPolyline([theLine, theArrow], pathOption);
 
-            backgroundMulitpolyline.bindPopup(options.popupContent(entity, dataId));
+            if (typeof options.popupContent === 'function') {
+              backgroundMulitpolyline.bindPopup(options.popupContent(entity, dataId));
+            }
+
             allArrows.push(multipolyline);
             allArrows.push(backgroundMulitpolyline);
           }
         }
       }
 
-      var lg = L.featureLayer(allArrows);
+      var lg = L.featureGroup(allArrows);
 
       return {
         arrowLayer: lg,
