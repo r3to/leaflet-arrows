@@ -1,6 +1,7 @@
 var MT = MT || {};
 // arrow module -> requires Leaflet!
 // https://github.com/meteotest/leaflet-arrows
+
 MT.arrows = (function() {
   /**
    * private functions and attributes to make code more save
@@ -82,7 +83,8 @@ MT.arrows = (function() {
 
     /**
      * data: object containing information for arrows
-     * { key : {
+     * {
+     *    key : {
      *    nameOfDegreeProperty* : Number (degree)
      *    nameOfDistanceProperty* :Number (km)
      *    [[nameOfColorProperty* : Any -> will be applied to the 'colorScheme' function]] opt
@@ -90,14 +92,20 @@ MT.arrows = (function() {
      *  }
      *
      * options : object for customizing path and data handling
-     *  **important**  define the names of the attributes in data map, which hold the information on length, degree and the parameter for the colorScheme
-     * function (*)
+     *   **important**  define the names of the attributes in data map,
+     *    which hold the information on length, degree and the parameter
+     *    for to supply the colorScheme
      * {
-     *  nameOfDegreeProperty : String eg. 'deg' -> name of Property in data objects containing the degree value
-     *  nameOfDistanceProperty : String 'length'-> name of Property in data objects containing the distance value
-     *  nameOfColorProperty : String 'value' -> name of Property in data objects containing the value, which should be supplied to the colorScheme function
-     *  isWindDegree : boolean (is Degree value direction of wind? -> degree - 180
-     *
+     *    nameOfDegreeProperty :
+     *      String eg. 'deg' -> name of Property in data objects containing
+     *      the degree value
+     *    nameOfDistanceProperty :
+     *      String 'length'-> name of Property in data objects containing
+     *      the distance value
+     *    nameOfColorProperty : String 'value' -> name of Property in data
+     *    objects containing the value, which should be supplied to the
+     *    colorScheme function
+     *    isWindDegree : boolean (is Degree value direction of wind? -> degree - 180
      *  }
      */
     makeArrowLayer: function(data, options, colorScheme) {
@@ -123,7 +131,8 @@ MT.arrows = (function() {
           var distance = entity[options.nameOfDistanceProperty];
           var pathOption = options.pathOptions;
 
-          // is current arrow valid according to the validator callback? change color if not
+          // is current arrow valid according to the validator callback?
+          // change color if not
           if (typeof config.validator !== 'function' || config.validator(entity)) {
             pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color;
           } else {
