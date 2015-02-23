@@ -13,8 +13,16 @@ MT.arrows = (function() {
     arrowheadDegree: 140, // degree of arrowhead
     clickableWidth: 10, // defines the width in pixels of the "phantom" path to capture click events on a line
     validator: function(pointData) {
-      return typeof pointData !== 'undefined';
+      if (typeof pointData !== 'undefined') {
+        return typeof pointData[config.nameOfDegreeProperty] !== "undefined" &&
+                typeof pointData[config.nameOfDistanceProperty] !== "undefined" &&
+                !isNaN(pointData[config.nameOfDistanceProperty]) &&
+                !isNaN(pointData[config.nameOfDistanceProperty]);
+      }
+      return false;
     }, // validator is a callback function that takes the data object of the current point and returns whether it is 'valid'. Invalid arrows will be drawn gray
+    nameOfDegreeProperty: 'dd',
+    nameOfDistanceProperty: 'ff',
     colorInvalidPoint: '#777',
     pathOptions: {
       color : '#333',
@@ -116,8 +124,8 @@ MT.arrows = (function() {
      *  }
      */
     makeArrowLayer: function(data, options, colorScheme) {
-      // options: nameOfLayer, isWindDegree, nameOfDegreeAttribute,
-      // nameOfDistanceAttribute, pathOptions, popupContent
+      // options: nameOfLayer, isWindDegree, nameOfDegreeProperty,
+      // nameOfDistanceProperty, pathOptions, popupContent
 
       this.setConfiguration(options);
 
@@ -144,11 +152,12 @@ MT.arrows = (function() {
             distance = parseFloat(entity[options.nameOfDistanceProperty]);
           } else {
             pathOption.color = config.colorInvalidPoint;
-            distance = 0, degree = 0;
+            distance = 0;
+            degree = 0;
           }
 
-          // if distance is 0 draw a point instead of an arrow
-          if (distance === 0 || distance === "undefined") {
+          // if distance or degree is 0  then draw a point instead of an arrow
+          if (distance === 0 || degree === 0) {
             pointPathOption.color = pathOption.color;
             var circle = L.circle(startPoint, 1000, pointPathOption);
 
