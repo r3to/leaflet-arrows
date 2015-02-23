@@ -147,7 +147,7 @@ MT.arrows = (function() {
           // is current arrow valid according to the validator callback?
           // change color if not
           if (typeof config.validator !== 'function' || config.validator(entity)) {
-            pathOption.color = typeof colorScheme === "function" ? colorScheme(entity[options.nameOfColorProperty]) : options.color;
+            pathOption.color = typeof colorScheme === "function" ? colorScheme(entity) : options.color;
             degree = options.isWindDegree ? entity[options.nameOfDegreeProperty] - 180 : entity[options.nameOfDegreeProperty];
             distance = parseFloat(entity[options.nameOfDistanceProperty]);
           } else {
