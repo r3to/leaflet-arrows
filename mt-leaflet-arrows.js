@@ -24,6 +24,7 @@ MT.arrows = (function() {
     nameOfDegreeProperty: 'dd',
     nameOfDistanceProperty: 'ff',
     colorInvalidPoint: '#777',
+    circleRadiusInvalidPoint: 1000, // Radius of the circle to display missing or '0'-value
     pathOptions: {
       color : '#333',
       opacity : 0.9,
@@ -159,7 +160,7 @@ MT.arrows = (function() {
           // if distance or degree is 0  then draw a point instead of an arrow
           if (distance === 0 || degree === 0) {
             pointPathOption.color = pathOption.color;
-            var circle = L.circle(startPoint, 1000, pointPathOption);
+            var circle = L.circle(startPoint, options.circleRadiusInvalidPoint, pointPathOption);
 
             if (typeof options.popupContent === 'function') {
               circle.bindPopup(options.popupContent(entity, dataId));
