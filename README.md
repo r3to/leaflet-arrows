@@ -1,42 +1,31 @@
 leaflet-arrows
 ==============
 
-Draw layers with arrows to your leaflet map, so you might guessed it requires http://leafletjs.com/
+Draw arrows on your leaflet map. Requires http://leafletjs.com/
 
-Very early version, read the doc in the code
+There will be more documentation and examples in the very near future. For now, read the code. 
 
 Usage
 =====
 
-	var windlayer = MT.arrows.makeArrowLayer(data, {
-						nameOfLayer: "Wind", 
-						isWindDegree: true,
-						nameOfDegreeProperty: "winddirection", 
-						nameOfDistanceProperty: "windspeed", 
-						nameOfColorProperty : 'alt',
-						pathOptions : { 
-							color: '#333', 
-							opacity: 0.9,
-							weight: 2,
-							smoothFactor: 0
-						}, 
-						popupContent: createPopupContent,
-						}, getColor);
-	windlayer.layerGroup.addTo(map);
-	layerControl.addOverlay(windlayer.layerGroup, windlayer.layerName
 
-The ''data'' argument for the makeArrowLayer function should be in this style:
+	var arrowOptions = {
+		distanceUnit: 'km',
+		isWindDegree: true,
+		stretchFactor: 1,
+		popupContent: function(data) { 
+			return "<h3>" + data.title + "</h3>"; 
+			},
+		arrowheadLength: 0.8,
+		drawSourceMarker: true
+	};
 
-	{
-		'key1' : {
-			winddirection : 50,
-			windspeed : 10, // km/h
-			alt : 3000,  // this will used as Argument for the getColor function
-			lat : 47.5,
-			lon : 7.6
-			// additional properties can be added and displayed in the popup
-		},
-		'keyN' : { ... }
-	}
-
-note: you can customize the attributes nameOfDegreeProperty, nameOfDistanceProperty, nameOfColorProperty to match your data-objects
+	var arrowData = {
+		latlng: L.latLng(46.95, 7.4),
+		degree: 77,
+		distance: 10,
+		title: "Demo"
+	};
+	
+	var arrowLayer = new L.Arrow(arrowData, arrowOptions)
+	arrowLayer.layerGroup.addTo(map);
