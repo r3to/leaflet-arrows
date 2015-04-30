@@ -1,0 +1,25 @@
+{
+  "name": "leaflet-arrows",
+  "version": "1.0.0-dev",
+  "description": "Draw arrows on your leaflet map",
+  "main": "leaflet-arrows.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meteotest/leaflet-arrows.git"
+  },
+  "keywords": [
+    "leafletjs",
+    "arrows",
+    "layer",
+    "wind"
+  ],
+  "author": "Reto Lehnherr <reto.lehnherr@meteotest.ch>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/meteotest/leaflet-arrows/issues"
+  },
+  "homepage": "http://meteotest.github.io/leaflet-arrows/"
+}
