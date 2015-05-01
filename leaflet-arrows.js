@@ -15,12 +15,11 @@
 
   // attach your plugin to the global 'L' variable
   if (typeof window !== 'undefined' && window.L) {
-    window.L.YourPlugin = factory(L);
+    window.L.Arrow = factory(L);
   }
 }(function(L) {
-
   // beware! the arrow factory
-  L.Arrow = L.Class.extend({
+  var Arrow = L.Class.extend({
     options: {
       distanceUnit: 'km', // can be [px,km]
       stretchFactor: 1, // should the distance be stretched?
@@ -292,4 +291,5 @@
       return arr;
     }
   });
+  return Arrow;
 }, window));
