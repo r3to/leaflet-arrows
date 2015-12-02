@@ -28,7 +28,7 @@
 <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span class="octicon octicon-link"></span></a>Introduction</h1>
 
 <p>There will be more Documentation and Examples in the very near future. For now, read the code. Or ask us.</p>
-<p>Beware that the API of this Plugin will change: L.Arrow is currently extending L.Class, extending L.Layer or L.Path would make more sense.</p>
+<p>Beware that the API of this Plugin will change.</p>
 
 <h2><a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirement</h2>
 
@@ -46,12 +46,12 @@
     distanceUnit: 'km',
     isWindDegree: true,
     stretchFactor: 1,
-    pathOptions: { 
+    pathOptions: {
       color: '#155799',
       opacity: 0.9
     },
-    popupContent: function(data) { 
-        return "<h1>" + data.title + "</h2><p>dsaflkasdlfkasdlkfjljkasdf</p>"; 
+    popupContent: function(data) {
+        return "<h1>" + data.title + "</h2><p>dsaflkasdlfkasdlkfjljkasdf</p>";
         },
     arrowheadLength: 5
   };
@@ -65,7 +65,7 @@
 
   var arrow = new L.Arrow(arrowData, arrowOptions);
   L.featureGroup([arrow]).addTo(map);
-  
+
 
 </script>
 
@@ -78,8 +78,8 @@
     distanceUnit: 'km',
     isWindDegree: true,
     stretchFactor: 1,
-    popupContent: function(data) { 
-        return "&lt;h3&gt;" + data.title + "&lt;/h3&gt;"; 
+    popupContent: function(data) {
+        return "&lt;h3&gt;" + data.title + "&lt;/h3&gt;";
         },
     arrowheadLength: 0.8
 };
@@ -93,7 +93,7 @@ var arrowData = {
 
 var arrow = new L.Arrow(arrowData, arrowOptions);
 L.featureGroup([arrow]).addTo(map);
-  
+
 </code></pre>
 
 

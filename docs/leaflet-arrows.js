@@ -15,12 +15,11 @@
 
   // attach your plugin to the global 'L' variable
   if (typeof window !== 'undefined' && window.L) {
-    window.L.YourPlugin = factory(L);
+    window.L.Arrow = factory(L);
   }
 }(function(L) {
-
   // beware! the arrow factory
-  L.Arrow = L.Class.extend({
+  var Arrow = L.Path.extend({
     options: {
       distanceUnit: 'km', // can be [px,km]
       stretchFactor: 1, // should the distance be stretched?
@@ -40,17 +39,18 @@
       }, // validator is a callback function that takes the data object of the current point and returns whether it is 'valid'. Invalid arrows will be drawn gray
 
       colorScheme: function() {
-        return this.pathOptions.color;
+        return this.color;
       }, // add own colorscheme callback
 
       circleRadiusInvalidPoint: 1000, // Radius of the circle to display missing or '0'-value
-      pathOptions: {
-        color: '#333',
-        opacity: 0.9,
-        fillOpacity: 0.9,
-        weight: 2,
-        smoothFactor: 0,
-      },
+
+      // path options
+      color: '#333',
+      opacity: 0.9, // stroke opacity
+      fillOpacity: 0.9,
+      weight: 2,
+      smoothFactor: 0,
+
       invalidPointOptions: {
         stroke: false,
         fillOpacity: 0.8,
@@ -65,7 +65,6 @@
         fillColor: '#333',
         radius: 5
       }
-
     },
 
     /**
@@ -110,13 +109,14 @@
       if (!this._map) {
         return;
       }
+      debugger;
       // is current arrow valid according to the validator callback?
       // change color if not
       if (typeof this.options.validator === "function" ||
         this.options.validator(this._data)) {
 
-        this.options.pathOptions.color = typeof this.options.colorScheme === "function" ?
-          this.options.colorScheme(this._data) : this.options.pathOptions.color;
+        this.options.color = typeof this.options.colorScheme === "function" ?
+          this.options.colorScheme(this._data) : this.options.color;
         this._data.distance = parseFloat(this._data.distance);
       } else {
         this._data.distance = 0;
@@ -150,13 +150,13 @@
         ];
         var theArrow = this._calculateArrowArray(theLine[1]);
 
-        var backgroundPathOption = L.Util.setOptions({}, this.options.pathOptions);
+        var backgroundPathOption = L.Util.setOptions({}, this.pathOptions);
 
         backgroundPathOption.opacity = 0;
         backgroundPathOption.weight = this.options.clickableWidth;
         var backgroundMulitpolyline = new L.MultiPolyline([theLine, theArrow],
           backgroundPathOption);
-        var multipolyline = new L.MultiPolyline([theLine, theArrow], this.options.pathOptions);
+        var multipolyline = new L.MultiPolyline([theLine, theArrow], this.options);
 
         if (typeof this.options.popupContent === 'function') {
           backgroundMulitpolyline.bindPopup(this.options.popupContent(this._data));
@@ -166,7 +166,7 @@
         if (this.options.drawSourceMarker) {
           if (typeof this._sourceMarker === 'undefined') {
             // use the same coloar as the arrow does
-            this.options.sourceMarkerOptions.fillColor = this.options.pathOptions.color;
+            this.options.sourceMarkerOptions.fillColor = this.color;
 
             this._sourceMarker = L.circleMarker(this._data.latlng, this.options.sourceMarkerOptions);
             this._sourceMarker.bindPopup(this.options.popupContent(this._data));
@@ -292,4 +292,5 @@
       return arr;
     }
   });
+  return Arrow;
 }, window));
