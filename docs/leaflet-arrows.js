@@ -48,7 +48,7 @@
       color: '#333',
       opacity: 0.9, // stroke opacity
       fillOpacity: 0.9,
-      weight: 2,
+      weight: 4, // the width of the arrow
       smoothFactor: 0,
 
       invalidPointOptions: {
@@ -109,7 +109,7 @@
       if (!this._map) {
         return;
       }
-      debugger;
+
       // is current arrow valid according to the validator callback?
       // change color if not
       if (typeof this.options.validator === "function" ||
