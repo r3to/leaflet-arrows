@@ -19,7 +19,7 @@
   }
 }(function(L) {
   // beware! the arrow factory
-  var Arrow = L.Path.extend({
+  var Arrow = L.FeatureGroup.extend({
     options: {
       distanceUnit: 'km', // can be [px,km]
       stretchFactor: 1, // should the distance be stretched?
@@ -34,8 +34,7 @@
       // the validator gets the bound data object as argument
       validator: function(data) {
         return typeof data.latlng !== "undefined" &&
-          typeof data.distance !== "undefined" &&
-          !isNaN(data.distance);
+          typeof data.distance !== "undefined" && !isNaN(data.distance);
       }, // validator is a callback function that takes the data object of the current point and returns whether it is 'valid'. Invalid arrows will be drawn gray
 
       colorScheme: function() {
@@ -79,16 +78,17 @@
     },
 
     onAdd: function(map) {
+
       this._map = map;
       this.redraw();
 
-      this._arrowLayer.addTo(map);
+      //this._arrowLayer.addTo(map);
 
-      if (typeof this._sourceMarker !== "undefined") {
-        this._sourceMarker.addTo(map);
-      }
+      /*if (typeof this._sourceMarker !== "undefined") {
+       this._sourceMarker.addTo(map);
+       }*/
 
-      // add a viewreset event listener for updating layer's position, do the latter
+      // add a viewreset event listener for updating layer's position
       map.on('viewreset', this._reset, this);
     },
 
@@ -108,6 +108,13 @@
       // only draw when on map
       if (!this._map) {
         return;
+      }
+
+      this._layers = {};
+
+      // bind popup to the whole feature group
+      if (typeof this.options.popupContent === 'function') {
+        this.bindPopup(this.options.popupContent(this._data));
       }
 
       // is current arrow valid according to the validator callback?
@@ -134,11 +141,7 @@
           circle = L.circleMarker(this._data.latlng, pathOptions);
         }
 
-        if (typeof this.options.popupContent === 'function') {
-          circle.bindPopup(this.options.popupContent(this._data));
-        }
-
-        this._arrowLayer = circle;
+        this.addLayer(circle);
 
       } else {
         var theLine = [
@@ -154,36 +157,24 @@
 
         backgroundPathOption.opacity = 0;
         backgroundPathOption.weight = this.options.clickableWidth;
-        var backgroundMulitpolyline = new L.MultiPolyline([theLine, theArrow],
+        var invisibleBackgroundPolyline = new L.Polyline([theLine, theArrow],
           backgroundPathOption);
-        var multipolyline = new L.MultiPolyline([theLine, theArrow], this.options);
+        var polyline = new L.Polyline([theLine, theArrow], this.options);
 
-        if (typeof this.options.popupContent === 'function') {
-          backgroundMulitpolyline.bindPopup(this.options.popupContent(this._data));
-        }
+        this.addLayer(invisibleBackgroundPolyline);
+        this.addLayer(polyline);
+
 
         // that special case, where a circle has to be drawn on the source of the arrow
         if (this.options.drawSourceMarker) {
           if (typeof this._sourceMarker === 'undefined') {
             // use the same coloar as the arrow does
             this.options.sourceMarkerOptions.fillColor = this.color;
-
             this._sourceMarker = L.circleMarker(this._data.latlng, this.options.sourceMarkerOptions);
-            this._sourceMarker.bindPopup(this.options.popupContent(this._data));
           } else {
             // there is a chance, that the latlng values have been changed by the setData-function
             this._sourceMarker.setLatLng(this._data.latlng);
           }
-        }
-
-        // create new feature group or update the existing layers in the feature group
-        if (typeof this._arrowLayer === 'undefined') {
-          this._arrowLayer = L.featureGroup([multipolyline, backgroundMulitpolyline]);
-        } else {
-          // a arrow layer is a feature group of multipolylines, all have to be updated.
-          this._arrowLayer.eachLayer(function(layer) {
-            layer.setLatLngs([theLine, theArrow]);
-          });
         }
       }
     },
@@ -242,8 +233,8 @@
       // this function is also used to find the points of the arrow
 
       var distance = dist * this.options.stretchFactor,
-        d2r = L.LatLng.DEG_TO_RAD, // degree 2 radius
-        r2d = L.LatLng.RAD_TO_DEG;
+        d2r = (Math.PI / 180), // degree 2 radius
+        r2d = (180 / Math.PI);
 
       if (this.options.distanceUnit.toLowerCase() === 'km') {
         var R = 6378.137, // earth radius in kmeters
