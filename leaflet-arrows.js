@@ -49,6 +49,7 @@
       fillOpacity: 0.9,
       weight: 4, // the width of the arrow
       smoothFactor: 0,
+      radius: 5, // default radius, when distance is 0
 
       invalidPointOptions: {
         stroke: false,
@@ -81,13 +82,6 @@
 
       this._map = map;
       this.redraw();
-
-      //this._arrowLayer.addTo(map);
-
-      /*if (typeof this._sourceMarker !== "undefined") {
-       this._sourceMarker.addTo(map);
-       }*/
-
       // add a viewreset event listener for updating layer's position
       map.on('viewreset', this._reset, this);
     },
