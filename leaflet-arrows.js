@@ -88,7 +88,9 @@
 
     onRemove: function() {
       // remove layer's DOM elements and listeners
-      this._map.removeLayer(this._arrowLayer);
+      for (var i in this._layers) {
+        this._map.removeLayer(this._layers[i]);
+      }
 
       if (typeof this._sourceMarker !== "undefined") {
         this._map.removeLayer(this._sourceMarker);
