@@ -18,7 +18,6 @@
   }
 }(function(L) {
   // beware! the arrow factory
-  "use strict";
   var Arrow = L.FeatureGroup.extend({
     options: {
       distanceUnit: 'km', // can be [px,km]
@@ -122,27 +121,17 @@
         this.bindPopup(this.options.popupContent(this._data));
       }
 
-      // is current arrow valid according to the validator callback?
-      // change color if not
-      if (typeof this.options.validator === "function" &&
-        this.options.validator(this._data)) {
-
-        if (typeof this.options.colorScheme === "function") {
-          this.options.color = this.options.colorScheme(this._data);
-        }
-        this._data.distance = parseFloat(this._data.distance);
-
-      } else {
-        // we can't validate the data
-        this._data.distance = 0;
-        this._data.angle = 0;
-        this._data.invalid = true;
-
+      if (this._data.valid && typeof this.options.colorScheme === "function") {
+        this.options.color = this.options.colorScheme(this._data);
       }
-      // if distance or degree is 0  then draw a point instead of an arrow
-      if (this._data.distance === 0 || this._data.angle === 0) {
+
+      this._data.distance = parseFloat(this._data.distance);
+
+
+      // if distance or degree is falsy/Zero then draw a point instead of an arrow
+      if (!this._data.valid || !this._data.distance || !this._data.angle) {
         var circle;
-        var pathOptions = this._data.invalid ? this.options.invalidPointOptions : this.options.defaultPointOptions;
+        var pathOptions = this._data.valid ? this.options.defaultPointOptions : this.options.invalidPointOptions;
 
         if (this.options.distanceUnit.toLowerCase() === 'km') {
           // use a tenth of the supplied radius (usally used in the circlemarker)
@@ -221,7 +210,15 @@
     // use this method to update the whole dataset that corresponds to the arrow
     setData: function(data) {
       this._data = data;
-      this.setAngle(data.degree);
+      if (this.options.validator(this._data)) {
+        this._data.valid = true;
+        this.setAngle(data.degree);
+
+      } else {
+        this._data.valid = false;
+        this._data.distance = NaN;
+        this._data.degree = NaN;
+      }
     },
 
 
