@@ -3,7 +3,6 @@
 
 // Module Loader Boilerplate
 (function(factory, window) {
-
   // define an AMD module that relies on 'leaflet'
   if (typeof define === 'function' && define.amd) {
     define(['leaflet'], factory);
@@ -19,6 +18,7 @@
   }
 }(function(L) {
   // beware! the arrow factory
+  "use strict";
   var Arrow = L.FeatureGroup.extend({
     options: {
       distanceUnit: 'km', // can be [px,km]
@@ -51,10 +51,17 @@
       smoothFactor: 0,
       radius: 5, // default radius, when distance is 0
 
-      invalidPointOptions: {
+      defaultPointOptions: {
         stroke: false,
         fillOpacity: 0.8,
         fillColor: '#111',
+        radius: 7
+      },
+
+      invalidPointOptions: {
+        stroke: false,
+        fillOpacity: 0.8,
+        fillColor: 'red',
         radius: 7
       },
 
@@ -89,7 +96,9 @@
     onRemove: function() {
       // remove layer's DOM elements and listeners
       for (var i in this._layers) {
-        this._map.removeLayer(this._layers[i]);
+        if (this._layers.hasOwnProperty(i)) {
+          this._map.removeLayer(this._layers[i]);
+        }
       }
 
       if (typeof this._sourceMarker !== "undefined") {
@@ -115,20 +124,25 @@
 
       // is current arrow valid according to the validator callback?
       // change color if not
-      if (typeof this.options.validator === "function" ||
+      if (typeof this.options.validator === "function" &&
         this.options.validator(this._data)) {
 
-        this.options.color = typeof this.options.colorScheme === "function" ?
-          this.options.colorScheme(this._data) : this.options.color;
+        if (typeof this.options.colorScheme === "function") {
+          this.options.color = this.options.colorScheme(this._data);
+        }
         this._data.distance = parseFloat(this._data.distance);
+
       } else {
+        // we can't validate the data
         this._data.distance = 0;
         this._data.angle = 0;
+        this._data.invalid = true;
+
       }
       // if distance or degree is 0  then draw a point instead of an arrow
       if (this._data.distance === 0 || this._data.angle === 0) {
-        var circle,
-          pathOptions = this.options.invalidPointOptions;
+        var circle;
+        var pathOptions = this._data.invalid ? this.options.invalidPointOptions : this.options.defaultPointOptions;
 
         if (this.options.distanceUnit.toLowerCase() === 'km') {
           // use a tenth of the supplied radius (usally used in the circlemarker)
@@ -199,7 +213,7 @@
       if (isNaN(distance)) {
         this._data.distance = 0;
       } else {
-        this._data.distance = parseFloat(distanceUnit);
+        this._data.distance = parseFloat(distance);
       }
       this.redraw();
     },
