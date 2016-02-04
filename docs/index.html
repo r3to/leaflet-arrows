@@ -13,6 +13,8 @@
     <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
 
     <script src="./leaflet-arrows.js"></script>
+    <script src="./WindScale.js"></script>
+
 </head>
 <body>
 <section class="page-header">
@@ -83,6 +85,11 @@
         var arrow2 = new L.Arrow(arrowData2, arrowOptions);
         L.featureGroup([arrow1, arrow2]).addTo(map);
 
+        var windScale = new L.WindScale({
+            // stretchFactor: arrowOptions.stretchFactor
+            stretchFactor: arrowOptions.stretchFactor
+        });
+        windScale.addTo(map);
 
     </script>
 
@@ -97,20 +104,20 @@
     isWindDegree: true,
     stretchFactor: 1,
     popupContent: function(data) {
-        return "&lt;h3&gt;" + data.title + "&lt;/h3&gt;";
+    return "&lt;h3&gt;" + data.title + "&lt;/h3&gt;";
     },
     arrowheadLength: 0.8
-};
+    };
 
-var arrowData = {
+    var arrowData = {
     latlng: L.latLng(46.95, 7.4),
     degree: 77,
     distance: 10,
     title: "Demo"
-};
+    };
 
-var arrow = new L.Arrow(arrowData, arrowOptions);
-arrow.addTo(map);
+    var arrow = new L.Arrow(arrowData, arrowOptions);
+    arrow.addTo(map);
 </code></pre>
 
 
