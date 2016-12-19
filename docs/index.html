@@ -1,149 +1,141 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
-    <meta charset="UTF-8">
-    <title>Leaflet Arrows by meteotest</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+	<head>
+		<meta charset="UTF-8">
+		<title>Leaflet Arrows by meteotest</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css"/>
-    <script src="http://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700">
 
-    <script src="./leaflet-arrows.js"></script>
-    <script src="./WindScale.js"></script>
+		<link rel="stylesheet" href="stylesheets/normalize.css">
+		<link rel="stylesheet" href="stylesheets/stylesheet.css">
+		<link rel="stylesheet" href="stylesheets/github-light.css">
 
-</head>
-<body>
-<section class="page-header">
-    <h1 class="project-name">Leaflet Arrows</h1>
+		<link rel="stylesheet" href="https://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.css">
+		<script src="https://cdn.leafletjs.com/leaflet/v1.0.0-beta.2/leaflet.js"></script>
 
-    <h2 class="project-tagline">Draw layers with arrows to your leaflet map</h2>
-    <a href="https://github.com/meteotest/leaflet-arrows" class="btn">View on GitHub</a>
-    <a href="https://github.com/meteotest/leaflet-arrows/zipball/master" class="btn">Download .zip</a>
-    <a href="https://github.com/meteotest/leaflet-arrows/tarball/master" class="btn">Download .tar.gz</a>
-</section>
+		<script src="leaflet-arrows.js"></script>
+		<script src="WindScale.js"></script>
 
-<section class="main-content">
-    <h1>
-        <a id="introduction" class="anchor" href="#introduction" aria-hidden="true"><span
-                class="octicon octicon-link"></span></a>Introduction</h1>
+	</head>
+	<body>
 
-    <p>There will be more Documentation and Examples in the very near future. For now, read the code. Or create a <a
-            href="https://github.com/meteotest/leaflet-arrows/issues">issue</a>.</p>
+		<section class="page-header">
+			<h1 class="project-name">Leaflet Arrows</h1>
+			<p class="project-tagline">Draw layers with arrows to your leaflet map</p>
 
-    <p>Be aware that the API of this Plugin will change.</p>
+			<a href="https://github.com/meteotest/leaflet-arrows" class="btn">View on GitHub</a>
+			<a href="https://github.com/meteotest/leaflet-arrows/zipball/master" class="btn">Download .zip</a>
+			<a href="https://github.com/meteotest/leaflet-arrows/tarball/master" class="btn">Download .tar.gz</a>
+		</section>
 
-    <h2><a id="requirements" class="anchor" href="#requirements" aria-hidden="true"><span
-            class="octicon octicon-link"></span></a>Requirement</h2>
+		<section class="main-content">
+			<h2 id="introduction">Introduction</h2>
 
-    <ul>
-        <li><a href="http://leafletjs.com/">Leaflet</a> <code>v >= 1.0.0-beta.2</code></li>
-    </ul>
+			<p>There will be more Documentation and Examples in the very near future. For now, read the code. Or create a <a href="https://github.com/meteotest/leaflet-arrows/issues">issue</a>.</p>
 
-    <h2><a id="examples" class="anchor" href="#examples" aria-hidden="true"><span
-            class="octicon octicon-link"></span></a>Examples</h2>
+			<p>Be aware that the API of this Plugin will change.</p>
 
-    <div id="very-basic" style="width:100%;height:300px;"></div>
-    <script type="text/javascript">
-        var tileLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v4/meteotest.m2a1jk4c/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWV0ZW90ZXN0IiwiYSI6ImpNeTZRaUkifQ.xR418oB8yaiRvYe-SIkUqQ', {
-            attribution: '<a href="https://www.mapbox.com">Mapbox</a> | <a href="http://www.meteotest.ch">Meteotest</a>'
-        });
+			<h3 id="requirements">Requirement</h3>
 
-        var map = L.map('very-basic').addLayer(tileLayer).setView([47.1, 7.2012], 8);
-        var arrowOptions = {
-            distanceUnit: 'km',
-            isWindDegree: true,
-            stretchFactor: 1,
-            pathOptions: {
-                color: '#155799',
-                opacity: 0.9
-            },
-            popupContent: function(data) {
-                return "<h1>" + data.title + "</h2>";
-            },
-            arrowheadLength: 5
-        };
+			<ul>
+				<li><a href="http://leafletjs.com/">Leaflet</a> <code>v >= 1.0.0-beta.2</code></li>
+			</ul>
 
-        var arrowData1 = {
-            latlng: L.latLng(46.953, 7.4238),
-            degree: 260,
-            distance: 70,
-            title: "Hi, I'm arrow 1!"
-        };
+			<h3 id="examples">Examples</h3>
 
-        var arrowData2 = {
-            latlng: L.latLng(47.5349, 7.423),
-            degree: 20,
-            distance: 50,
-            title: "And I'm arrow 2, nice to meet you!"
-        };
+			<div id="very-basic" style="width:100%; height:300px;"></div>
 
-        var arrow1 = new L.Arrow(arrowData1, arrowOptions);
-        var arrow2 = new L.Arrow(arrowData2, arrowOptions);
-        L.featureGroup([arrow1, arrow2]).addTo(map);
+			<script>
+				var tileLayer = L.tileLayer('https://{s}.tiles.mapbox.com/v4/meteotest.m2a1jk4c/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWV0ZW90ZXN0IiwiYSI6ImpNeTZRaUkifQ.xR418oB8yaiRvYe-SIkUqQ', {
+					attribution: '<a href="https://www.mapbox.com">Mapbox</a> | <a href="http://www.meteotest.ch">Meteotest</a>'
+				});
 
-        var windScale = new L.WindScale({
-            // stretchFactor: arrowOptions.stretchFactor
-            stretchFactor: arrowOptions.stretchFactor
-        });
-        windScale.addTo(map);
+				var map = L.map('very-basic').addLayer(tileLayer).setView([47.1, 7.2012], 8);
 
-    </script>
+				var arrowOptions = {
+					distanceUnit: 'km',
+					isWindDegree: true,
+					stretchFactor: 1,
+					pathOptions: {
+						color: '#155799',
+						opacity: 0.9
+					},
+					popupContent: function(data) {
+						return '<strong>' + data.title + '</strong>';
+					},
+					arrowheadLength: 5
+				};
 
-    <p>There will be more examples in the very near future.</p>
+				var arrowData1 = {
+					latlng: L.latLng(46.953, 7.4238),
+					degree: 260,
+					distance: 70,
+					title: "Hi, I am arrow 1!"
+				};
 
+				var arrowData2 = {
+					latlng: L.latLng(47.5349, 7.423),
+					degree: 20,
+					distance: 50,
+					title: "And I am arrow 2, nice to meet you!"
+				};
 
-    <h2><a id="usage" class="anchor" href="#usage" aria-hidden="true"><span class="octicon octicon-link"></span></a>Usage
-    </h2>
+				var arrow1 = new L.Arrow(arrowData1, arrowOptions);
+				var arrow2 = new L.Arrow(arrowData2, arrowOptions);
+				L.featureGroup([arrow1, arrow2]).addTo(map);
 
-<pre><code>var arrowOptions = {
-    distanceUnit: 'km',
-    isWindDegree: true,
-    stretchFactor: 1,
-    popupContent: function(data) {
-    return "&lt;h3&gt;" + data.title + "&lt;/h3&gt;";
-    },
-    arrowheadLength: 0.8
-    };
+				var windScale = new L.WindScale({
+					stretchFactor: arrowOptions.stretchFactor
+				});
+				windScale.addTo(map);
+			</script>
 
-    var arrowData = {
-    latlng: L.latLng(46.95, 7.4),
-    degree: 77,
-    distance: 10,
-    title: "Demo"
-    };
+			<h3 id="usage">Usage</h3>
 
-    var arrow = new L.Arrow(arrowData, arrowOptions);
-    arrow.addTo(map);
-</code></pre>
+			<pre><code>var arrowOptions = {
+	distanceUnit: 'km',
+	isWindDegree: true,
+	stretchFactor: 1,
+	popupContent: function(data) {
+		return '&lt;em>' + data.title + '&lt;/em>';
+	},
+	arrowheadLength: 0.8
+};
+
+var arrowData = {
+	latlng: L.latLng(46.95, 7.4),
+	degree: 77,
+	distance: 10,
+	title: 'Demo'
+};
+
+var arrow = new L.Arrow(arrowData, arrowOptions);
+arrow.addTo(map);</code></pre>
 
 
-    <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/meteotest/leaflet-arrows">Leaflet Arrows</a> is maintained by <a
-                href="https://github.com/meteotest">meteotest</a>.</span>
+			<footer class="site-footer">
+				<span class="site-footer-owner"><a href="https://github.com/meteotest/leaflet-arrows">Leaflet Arrows</a> is maintained by <a
+	                href="https://github.com/meteotest">meteotest</a>.</span>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a
-                href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a
-                href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-    </footer>
+				<span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a
+	                href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a
+	                href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+			</footer>
 
-</section>
+		</section>
 
-<script type="text/javascript">
-    var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-    document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-<script type="text/javascript">
-    try {
-        var pageTracker = _gat._getTracker("Tracking-ID UA-62477646-1");
-        pageTracker._trackPageview();
-    } catch (err) {
-    }
-</script>
+		<script>
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
 
-</body>
+		<script>
+			try {
+				var pageTracker = _gat._getTracker("Tracking-ID UA-62477646-1");
+				pageTracker._trackPageview();
+			} catch (err) {}
+		</script>
+
+	</body>
 </html>
-

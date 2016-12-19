@@ -19,8 +19,6 @@
   ],
   "author": "Reto Lehnherr <reto.lehnherr@meteotest.ch>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/meteotest/leaflet-arrows/issues"
-  },
-  "homepage": "http://meteotest.github.io/leaflet-arrows/"
+  "homepage": "http://meteotest.github.io/leaflet-arrows/",
+  "bugs": "https://github.com/meteotest/leaflet-arrows/issues"
 }
